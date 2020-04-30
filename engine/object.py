@@ -1,11 +1,21 @@
 import pygame
 from shapely.geometry import Polygon
+from engine import engine
 
-from engine import engine, resolution
+class Object(object):
 
-class Player(object):
+  next_id = 0
 
-  def __init__(self, img, x=resolution[0]/2, y=resolution[1]/2):
+  def __init__(self, img, name=None, x=None, y=None):
+    Object.next_id += 1
+    self.id = Object.next_id
+    if name is None:
+      name = "Object: {self.id}"
+    if x is None:
+      x = engine.width/2
+    if y is None:
+      y = engine.height/2
+    self.name = name
     self.sprite = pygame.image.load(img)
     self.x = x
     self.y = y
@@ -55,6 +65,11 @@ class Player(object):
     poly = Polygon(self.get_bbox(x,y))
     for o in engine.obstacles:
       if(poly.intersects(o.poly)):
+        return o
+    for o in engine.objects:
+      if o == self:
+        continue
+      if poly.intersects(Polygon(o.get_bbox())):
         return o
     return False
 

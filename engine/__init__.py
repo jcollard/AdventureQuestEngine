@@ -17,6 +17,7 @@ class Engine(object):
     self.player = None
     self.keys = set()
     self.obstacles = set()
+    self.objects = set()
     self.width = resolution[0]
     self.height = resolution[1]
 
@@ -36,9 +37,8 @@ class Engine(object):
   def on_mouse_click(self, handler):
     self.mouse_handlers[pygame.MOUSEBUTTONDOWN] = handler
 
-  def add_player(self, player):
-    self.player = player
-
+  def add_object(self, object):
+    self.objects.add(object)
 
   def start_game(self) :
     pygame.init()
@@ -77,8 +77,8 @@ class Engine(object):
     
         # --- Drawing code should go here
         screen.blit(self.background, (0,0))
-        if self.player:
-          self.player.draw(screen)
+        for object in self.objects:
+          object.draw(screen)
     
         for obstacle in self.obstacles:
           obstacle.draw(screen)
