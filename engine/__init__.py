@@ -18,6 +18,9 @@ class Engine(object):
     self.keys = set()
     self.obstacles = set()
     self.objects = set()
+    self.timers = set()
+    self.remove_timers = set()
+    self.add_timers = set()
     self.width = resolution[0]
     self.height = resolution[1]
 
@@ -39,6 +42,15 @@ class Engine(object):
 
   def add_object(self, object):
     self.objects.add(object)
+
+  def remove_object(self, object):
+    self.objects.remove(object)
+
+  def add_timer(self, timer):
+    self.add_timers.add(timer)
+
+  def remove_timer(self, timer):
+    self.remove_timers.add(timer)
 
   def start_game(self) :
     pygame.init()
@@ -70,7 +82,17 @@ class Engine(object):
         for key in self.keys:
           if key in self.key_handlers:
             self.key_handlers[key]()
-    
+
+        for timer in self.add_timers:
+          self.timers.add(timer)
+        self.add_timers.clear()
+
+        for timer in self.remove_timers:
+          self.timers.remove(timer)
+        self.remove_timers.clear()
+
+        for timer in self.timers:
+          timer.tick()  
 
         screen.fill(BLACK)
         

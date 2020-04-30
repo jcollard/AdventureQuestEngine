@@ -76,7 +76,7 @@ class Object(object):
   def set_x(self, x):
     o = self.check_obstacle(x, self.y)
     if o:
-      return o.name
+      return o
 
     if x < 0:
       self.x = 0
@@ -87,12 +87,12 @@ class Object(object):
       return "RIGHT"
 
     self.x = x
-    return "IN"
+    return None
   
   def set_y(self, y):
     o = self.check_obstacle(self.x, y)
     if o:
-      return o.name
+      return o
 
     if y < 0:
       self.y = 0
@@ -102,4 +102,4 @@ class Object(object):
       return "BOTTOM"
 
     self.y = y
-    return "IN"
+    return None
