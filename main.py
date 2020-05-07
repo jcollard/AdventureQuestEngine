@@ -39,11 +39,14 @@ podium = Obstacle([(323,360), (375,362), (375,403),(323,410)])
 podium.hide()
 engine.add_obstacle(podium)
 
+
+podium1 = Obstacle([(330,262), (328,278), (369,370),(369,266)])
+podium1.hide()
+engine.add_obstacle(podium1)
+
 big_rock = Obstacle([(345,221), (300, 187), (300, 148), (397, 151), (399, 217)])
 big_rock.hide()
 engine.add_obstacle(big_rock)
 
-
-# can you see me type
 
 engine.start_game()

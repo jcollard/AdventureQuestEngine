@@ -12,8 +12,9 @@ class Engine(object):
 
   def __init__(self):
     self.set_background('images/bg-start.png')
-    self.key_handlers = {}
+    self.key_down_handlers = {}
     self.mouse_handlers = {}
+    self.key_pressed_handlers = {}
     self.player = None
     self.keys = set()
     self.obstacles = set()
@@ -23,6 +24,14 @@ class Engine(object):
     self.add_timers = set()
     self.width = resolution[0]
     self.height = resolution[1]
+    self.sprites = set()
+
+  def add_sprite(self, sprite):
+    self.sprites.add(sprite)
+
+  def remove_sprite(self, sprite):
+    if sprite in self.sprites:
+      self.sprites.remove(sprite)
 
   def add_obstacle(self, obstacle):
     self.obstacles.add(obstacle)
@@ -32,7 +41,10 @@ class Engine(object):
     self.background = pygame.transform.scale(background, resolution)
 
   def on_key_down(self, key, handler):
-    self.key_handlers[key] = handler
+    self.key_down_handlers[key] = handler
+
+  def on_key_pressed(self, key, handler):
+    self.key_pressed_handlers[key] = handler
 
   def on_mouse_move(self, handler):
     self.mouse_handlers[pygame.MOUSEMOTION] = handler
@@ -74,14 +86,17 @@ class Engine(object):
 
             if event.type == pygame.KEYDOWN:
               self.keys.add(event.key)
+              if event.key in self.key_pressed_handlers:
+                handler = self.key_pressed_handlers[event.key]
+                handler()
 
             if event.type == pygame.KEYUP:
               if event.key in self.keys:
                 self.keys.remove(event.key)
 
         for key in self.keys:
-          if key in self.key_handlers:
-            self.key_handlers[key]()
+          if key in self.key_down_handlers:
+            self.key_down_handlers[key]()
 
         for timer in self.add_timers:
           self.timers.add(timer)
@@ -104,6 +119,9 @@ class Engine(object):
     
         for obstacle in self.obstacles:
           obstacle.draw(screen)
+
+        for sprite in self.sprites:
+          screen.blit(sprite.img, (sprite.x,sprite.y))
 
         # --- Go ahead and update the screen with what we've drawn.
         pygame.display.flip()
