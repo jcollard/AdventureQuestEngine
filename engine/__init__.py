@@ -25,6 +25,7 @@ class Engine(object):
     self.width = resolution[0]
     self.height = resolution[1]
     self.sprites = set()
+    self.remove_objects = set()
 
   def add_sprite(self, sprite):
     self.sprites.add(sprite)
@@ -56,7 +57,7 @@ class Engine(object):
     self.objects.add(object)
 
   def remove_object(self, object):
-    self.objects.remove(object)
+    self.remove_objects.add(object)
 
   def add_timer(self, timer):
     self.add_timers.add(timer)
@@ -108,6 +109,11 @@ class Engine(object):
 
         for timer in self.timers:
           timer.tick()  
+
+          for obj in self.remove_objects:
+            if obj in self.objects:
+              self.objects.remove(obj)
+          self.remove_objects.clear()
 
         screen.fill(BLACK)
         
