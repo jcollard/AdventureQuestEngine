@@ -62,6 +62,8 @@ class Object(object):
       (x + self.left, y + self.top + self.bottom)]
 
   def check_obstacle(self, x, y):
+    if self not in engine.objects:
+      return False
     poly = Polygon(self.get_bbox(x,y))
     for o in engine.obstacles:
       if(poly.intersects(o.poly)):
