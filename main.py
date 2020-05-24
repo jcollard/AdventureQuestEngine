@@ -3,6 +3,7 @@ from engine import engine
 from engine.object import Object
 from engine.obstacle import Obstacle
 from engine.timer import Timer
+from engine.sprite import Sprite
 
 #hello
 #hi!
@@ -52,6 +53,11 @@ octorok.set_y(563)
 octorok.draw_bbox()
 engine.add_object(octorok)
 octorok.hide_bbox()
+
+heart_sprite = Sprite("images/hearts.png", 0, 7, 7, 7)
+heart_sprite.x = 200
+heart_sprite.y = 200
+engine.add_sprite(heart_sprite)
 
 
 def octorok_timer(time):

@@ -26,13 +26,13 @@ class Engine(object):
     self.height = resolution[1]
     self.sprites = set()
     self.remove_objects = set()
+    self.remove_sprites = set()
 
   def add_sprite(self, sprite):
     self.sprites.add(sprite)
 
   def remove_sprite(self, sprite):
-    if sprite in self.sprites:
-      self.sprites.remove(sprite)
+    self.remove_sprites.add(sprite)
 
   def add_obstacle(self, obstacle):
     self.obstacles.add(obstacle)
@@ -110,10 +110,15 @@ class Engine(object):
         for timer in self.timers:
           timer.tick()  
 
-          for obj in self.remove_objects:
-            if obj in self.objects:
-              self.objects.remove(obj)
-          self.remove_objects.clear()
+        for obj in self.remove_objects:
+          if obj in self.objects:
+            self.objects.remove(obj)
+        self.remove_objects.clear()
+
+        for sprite in self.remove_sprites:
+          if sprite in self.sprites:
+            self.sprites.remove(sprite)
+        self.remove_sprites.clear()
 
         screen.fill(BLACK)
         

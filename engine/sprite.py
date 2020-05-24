@@ -15,7 +15,7 @@ class Sprite(object):
       height = sheet.get_height()
     self.img = pygame.Surface((width, height))
 
-    self.img.blit(sheet, (0,0), pygame.Rect(top, left, width, height))
+    self.img.blit(sheet, (0,0), pygame.Rect(left, top, width, height))
     self.x = 0
     self.y = 0
 
