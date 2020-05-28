@@ -48,17 +48,50 @@ engine.add_object(link)
 
 octorok = Object("images/octorok-down.png")
 octorok.facing = "up"
+octorok.rocks = 0
 octorok.set_x(360)
 octorok.set_y(563)
 octorok.draw_bbox()
 engine.add_object(octorok)
 octorok.hide_bbox()
 
-heart_sprite = Sprite("images/hearts.png", 0, 7, 7, 7)
-heart_sprite.x = 200
-heart_sprite.y = 200
-engine.add_sprite(heart_sprite)
+#heart_sprite = Sprite("images/hearts.png", 0, 7, 7, 7)
+#heart_sprite.x = 200
+#heart_sprite.y = 200
+#engine.add_sprite(heart_sprite)
 
+# Shoots a rock in the specified direction
+# Does not shoot a rock if the amount is
+# greater than 20
+def octorock_rocks(amount, direction):
+  if amount > 20:
+    return
+  rock = Object("images/rock.png")
+  rock.set_x(371)
+  rock.set_y(560)
+  rock.draw_bbox()
+  engine.add_object(rock)
+  octorok.rocks += 1
+  print(octorok.rocks)
+
+  def rock_time_er(time):
+    rock.x = rock.x - 2
+    #print(rock.x, rock.y)
+    hit = rock.check_obstacle(rock.x, rock.y)
+    if hit == link:
+      link.hearts = link.hearts - 1
+      print(link.hearts)
+      print("Hitting Link!")
+      engine.remove_object(rock)
+      octorok.rocks -= 1
+      #engine.remove_timer(rock_time_er)
+    if rock.x < 0 and rock in engine.objects:
+      engine.remove_object(rock)
+      
+      #engine.remove_timer(rock_time_er)
+
+  rock_time_er_ = Timer(50, rock_time_er)
+  engine.add_timer(rock_time_er_)
 
 def octorok_timer(time):
   if octorok.facing == "up":
@@ -69,51 +102,13 @@ def octorok_timer(time):
     octorok.facing = "down"
   elif octorok.facing == "down":
      octorok.set_image("images/octorok-left.png")
-     octorok.facing = "left"
-
-     rock = Object("images/rock.png")
-     rock.set_x(371)
-     rock.set_y(560)
-     rock.draw_bbox()
-     engine.add_object(rock)
-
-     def rock_time_er(time):
-       rock.x = rock.x - 2
-       #print(rock.x, rock.y)
-       hit = rock.check_obstacle(rock.x, rock.y)
-       if hit == link:
-         link.hearts = link.hearts - 1
-         print(link.hearts)
-         print("Hitting Link!")
-         engine.remove_object(rock)
-       #print(hit)
-
-     rock_time_er_ = Timer(50, rock_time_er)
-     engine.add_timer(rock_time_er_)
-
+     octorok.facing = "left"   
+     octorock_rocks(octorok.rocks, "left")
   elif octorok.facing == "left":
       octorok.set_image("images/octorok-up.png")
       octorok.facing = "up"
       
-      rock = Object("images/rock.png")
-      rock.set_x(371)
-      rock.set_y(560)
-      rock.draw_bbox()
-      engine.add_object(rock)
 
-      def rock_time_er(time):
-        rock.y = rock.y - 2
-        #print(rock.x, rock.y)
-        hit = rock.check_obstacle(rock.x, rock.y)
-        if hit == link:
-          link.hearts = link.hearts - 1
-          print(link.hearts)
-          print("Hitting Link!")
-          engine.remove_object(rock)
-        #print(hit)
-
-      rock_time_er_ = Timer(50, rock_time_er)
-      engine.add_timer(rock_time_er_)
 
 
 octorok_time_er_ = Timer(250, octorok_timer)
